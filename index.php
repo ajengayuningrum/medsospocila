@@ -25,11 +25,14 @@ include 'koneksi.php';
     <style>
         .cover {
             height: 200px;
+
         }
 
-        .cover img{
+        .cover img {
             background-size: cover;
             background-position: center;
+            width: 1300px;
+            height: 320px;
         }
     </style>
 </head>
@@ -63,9 +66,6 @@ include 'koneksi.php';
             </div>
         </div> -->
 
-    <footer class="fixed-bottom bg-secondary" style="min-height: 65px">
-        <p class="text-center pt-3 px-4">Copyright &copy 2024 PPKD - Jakarta Pusat.</p>
-    </footer>
     </div>
 
     <script src="bootstrap-5.3.3/dist/js/jquery-3.7.1.min.js"></script>
@@ -75,26 +75,27 @@ include 'koneksi.php';
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
     <script>
-      $('#summernote').summernote({
-        placeholder: 'Hello stand alone ui',
-        tabsize: 2,
-        height: 120,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']]
-        ]
-      });
+        $('#summernote').summernote({
+            placeholder: 'Hello stand alone ui',
+            tabsize: 2,
+            height: 120,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
     </script>
 
     <script>
         $("#id_peminjaman").change(function() {
             let no_peminjaman = $(this).find('option:selected').text();
-            let tbody = $('tbody'), newRow = "";
+            let tbody = $('tbody'),
+                newRow = "";
             $.ajax({
                 url: "ajax/getPeminjam.php?no_peminjaman=" + no_peminjaman,
                 type: "get",
@@ -104,12 +105,12 @@ include 'koneksi.php';
                     $('#tgl_peminjaman').val(res.data.tgl_peminjaman);
                     $('#tgl_pengembalian').val(res.data.tgl_pengembalian);
                     $('#nama_anggota').val(res.data.nama_anggota);
-                    
+
                     let tanggal_kembali = new moment(res.data.tgl_pengembalian);
                     let currentDate = new Date().toJSON().slice(0, 10);
                     console.log(currentDate);
                     let tanggal_di_kembalikan = new moment(currentDate);
-                    let selisih =  tanggal_di_kembalikan.diff(tanggal_kembali, "days");
+                    let selisih = tanggal_di_kembalikan.diff(tanggal_kembali, "days");
 
                     if (selisih < 0) {
                         selisih = 0;
@@ -120,7 +121,7 @@ include 'koneksi.php';
                     $('#denda').val(totalDenda);
 
 
-                    $.each(res.detail_peminjaman, function(key,val) {
+                    $.each(res.detail_peminjaman, function(key, val) {
                         newRow += "<tr>";
                         newRow += "<td>" + val.nama_buku + "</td>";
                         newRow += "</td>";
