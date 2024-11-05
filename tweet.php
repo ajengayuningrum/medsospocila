@@ -55,10 +55,10 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user 
             </div>
 
             <!-- like -->
-             <div class="status mt-1">
+            <div class="status mt-1">
                 <input type="text" id="user_id_like" value="<?php echo $rowPosting['id_user'] ?>">
-                <button class="btn btn-sucess btn-sm" onclick="toggleLike (<?php echo $rowPosting['id']; ?>">Like (0)</button>
-             </div>
+                <button class="btn btn-sucess btn-sm" onclick="toggleLike(<?php echo $rowPosting['id']; ?>)">Like (0)</button>
+            </div>
 
             <div class="flex-grow-1 ms-3">
                 <form id="comment-form" method="POST" action="add_comment.php">
@@ -83,8 +83,9 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user 
                                 <img src="upload/<?php echo !empty($rowUser['foto']) ? $rowUser['foto'] : 'https://placehold.co/500x200' ?>" alt="..." width="25" class="border border-2 rounded-circle me-2" height="auto">
                                 <h5 class="fw-bold mb-0 me-2"><?php echo $rowUser['nama_lengkap'] ?></h5>
                                 <p class="mb-0 text-dark opacity-50">@<?php echo $rowUser['nama_pengguna'] ?></p>
-                                
-                            </span><p class="mb-2 mt-3 ms-4" style="font-size: 20px;"> <?php echo  $rowCount['comment_text'] ?></p>
+
+                            </span>
+                            <p class="mb-2 mt-3 ms-4" style="font-size: 20px;"> <?php echo  $rowCount['comment_text'] ?></p>
                     <?php
                         }
                     }
@@ -128,52 +129,23 @@ $queryPosting = mysqli_query($koneksi, "SELECT tweet.* FROM tweet WHERE id_user 
 <script>
     function toggleLike(statusId) {
         const userId = document.getElementById('user_id_like').value;
-        fetch("like_status.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `status_id=${statusId}&user_id=${userId}`
-        })
-        .then(response =>  response.json())
-        .then(data => {
-            if (data.status == 'success') {
-                alert("Liked");
-            }else if (data.status == "unliked") {
-                alert("Unliked");
-            }
-            location.reload();
+        fetch("likes_status.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `status_id=${statusId}&user_id=${userId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == 'liked') {
+                    alert("Liked!");
+                } else if (data.status === "unliked") {
+                    alert("Unliked");
+                }
+                location.reload();
             })
             .catch(error => console.error("Error:", error));
 
     }
 </script>
-
-<!-- <script>
-    document.getElementById('comment-form').addEventListener('posting', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-
-        fetch("add_comment.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const alertBox = document.getElementById('comment-alert');
-                if (data.status === "success") {
-                    alertBox.className = "alert alert-success";
-                    alertBox.innerHTML = data.message;
-
-                    // bersihkan textarea
-                    document.getElementById('comment_text').value = '';
-                    location.reload();
-                } else {
-                    alertBox.className = "alert alert-danger";
-                    alertBox.innerHTML = data.message;
-                }
-                alertBox.style.display = "block";
-            })
-            .catch(error => console.error('Error:', error));
-    })
-</script> -->
